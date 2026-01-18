@@ -114,7 +114,7 @@ XFlix/
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/xflix.git
+   git clone https://github.com/susovan777/xflix.git
    cd xflix
    ```
 
@@ -203,7 +203,7 @@ For detailed API documentation, see [Backend README](./Backend/README.md)
 ### Mobile View
 
 <div align="center">
-   <img src="./Frontend/src/assets/6.png"  width="600"/>
+   <img src="./Frontend/src/assets/6.png"  width="300"/>
 </div>
 
 ---
