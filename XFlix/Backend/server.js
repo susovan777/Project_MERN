@@ -9,5 +9,5 @@ connectDB();
 
 app.listen(port, () => {
   console.log('🛜 Server started on port:', port);
-  console.log(`🔗 API base: http://localhost:${port}/api/v1`);
+  console.log(`🔗 API base: http://localhost:${port}`);
 });
