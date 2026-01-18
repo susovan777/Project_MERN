@@ -7,6 +7,7 @@ import VideoDetail from './pages/Video/VideoDetail.jsx';
 import { uploadVideoWithToast } from './services/videoService.js';
 import UploadVideoModal from './components/VideoModal/UploadModal.jsx';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ZapOff } from 'lucide-react';
 
 function App() {
   const [refreshKey, setRefreshKey] = useState(0);
@@ -77,6 +78,9 @@ function App() {
               path="*"
               element={
                 <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+                  <span>
+                    <ZapOff color="#99a1af" size={60} />
+                  </span>
                   <h1 className="text-4xl font-bold mb-4">404</h1>
                   <p className="text-xl text-gray-600 dark:text-gray-400">
                     Page not found

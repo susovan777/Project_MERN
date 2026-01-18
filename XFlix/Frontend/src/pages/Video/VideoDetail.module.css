@@ -38,7 +38,7 @@
 }
 
 .title {
-  font-size: 1.875rem;
+  font-size: 1.7rem;
   font-weight: 700;
   color: #111827;
   margin: 0 0 1rem 0;
@@ -49,13 +49,22 @@
   color: white;
 }
 
+/* Stats and Vote Buttons Row */
+.statsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
 .stats {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   font-size: 0.875rem;
   color: #6b7280;
-  margin-bottom: 1rem;
   flex-wrap: wrap;
 }
 
@@ -76,7 +85,6 @@
 .badges {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 1.5rem;
   flex-wrap: wrap;
 }
 
@@ -110,31 +118,22 @@
   color: #fde68a;
 }
 
-.voteSection {
-  border-top: 1px solid #e5e7eb;
-  padding-top: 1.5rem;
-}
-
-:global(html.dark) .voteSection {
-  border-top-color: #374151;
-}
-
 .voteButtons {
   display: flex;
   gap: 1rem;
-  margin-bottom: 0.75rem;
+  align-items: center;
 }
 
 .voteButton {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.45rem 1.2rem;
   border-radius: 9999px;
   border: 1px solid #d1d5db;
   background-color: white;
   color: #374151;
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -158,35 +157,33 @@
 }
 
 .voteButton:active:not(:disabled) {
-  transform: translateY(0);
+  transform: scale(0.95);
 }
 
-.voteButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+/* Active state - when user has voted */
+.voteButton.active {
+  border-color: #3b82f6;
 }
 
-.upvote:hover:not(:disabled) {
+.upvote.active {
   background-color: #dbeafe;
-  border-color: #3b82f6;
   color: #1e40af;
+  border-color: #3b82f6;
 }
 
-:global(html.dark) .upvote:hover:not(:disabled) {
+:global(html.dark) .upvote.active {
   background-color: #1e3a8a;
-  border-color: #3b82f6;
   color: #bfdbfe;
 }
 
-.downvote:hover:not(:disabled) {
+.downvote.active {
   background-color: #fee2e2;
-  border-color: #ef4444;
   color: #991b1b;
+  border-color: #ef4444;
 }
 
-:global(html.dark) .downvote:hover:not(:disabled) {
+:global(html.dark) .downvote.active {
   background-color: #7f1d1d;
-  border-color: #ef4444;
   color: #fecaca;
 }
 
@@ -258,11 +255,12 @@
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 
-  .voteButtons {
+  .statsRow {
     flex-direction: column;
+    align-items: flex-start;
   }
 
   .voteButton {
