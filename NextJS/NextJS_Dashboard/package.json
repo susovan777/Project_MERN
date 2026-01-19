@@ -1,5 +1,8 @@
 {
   "private": true,
+  "prettier": {
+    "singleQuote": true
+  },
   "scripts": {
     "build": "next build",
     "dev": "next dev --turbopack",
