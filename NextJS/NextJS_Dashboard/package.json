@@ -1,5 +1,6 @@
 {
   "private": true,
+  "githubRepo": "https://github.com/vercel/next-learn/tree/main/dashboard/starter-example",
   "prettier": {
     "singleQuote": true
   },
