@@ -33,3 +33,6 @@ build
 
 # other
 .prettierrc
+*.mp4
+*.pdf
+*.doc

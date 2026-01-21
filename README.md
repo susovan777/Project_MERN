@@ -12,7 +12,8 @@ This repository contains a curated collection of my full-stack projects, demonst
 | **Task Manager** | [**LIVE DEMO**](https://task-manager-five-rose-72.vercel.app/) | [Codebase](https://github.com/susovan777/Project_MERN/tree/main/Task_Manager) | React, Node.js, Express, MongoDB, Tailwind CSS |
 | **Student List** | [**LIVE DEMO**](https://studentlist-frontend-tau.vercel.app/) | [Codebase](https://github.com/susovan777/Project_MERN/tree/main/CC_StudentList) | React, Express, Node.js, Mongoose, Form Validation |
 | **Video Streamer** | [**LIVE DEMO**](https://video-streamer-bay.vercel.app/) | [Codebase](https://github.com/susovan777/Project_MERN/tree/main/Video_Streamer) | React, Express, Node.js, Mongoose, HLS conversion |
-<!-- | **Video Streamer** | [**LIVE DEMO**](Live_link) | [Codebase](LINK_REPO_HERE) | Tech_Stacks | -->
+| **XFlix** | [**LIVE DEMO**](https://xflix-client.vercel.app/) | [Codebase](https://github.com/susovan777/xflix.git) | React, Express, Node.js, Mongoose, Tailwind  |
+<!-- | **XFlix** | [**LIVE DEMO**](Live_link) | [Codebase](LINK_REPO_HERE) | Tech_Stacks | -->
 
 --- 
 

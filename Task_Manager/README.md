@@ -4,6 +4,19 @@ A simple, minimal, and clean task management application built using the MERN st
 
 ---
 
+### 🌐 Live Demo & API Endpoints
+
+- **Live Frontend Application:** [Task Manager Live URL](https://task-manager-five-rose-72.vercel.app/) 
+- **Deployed Backend APIs:** 
+  - **GET All Tasks:** `/api/tasks`
+  - **POST Create Task:** `/api/tasks`
+  - **GET Single Task:** `/api/tasks/:id`
+  - **PUT/PATCH Update Task:** `/api/tasks/:id`
+  - **DELETE Task:** `/api/tasks/:id`
+
+
+---
+
 ### ✨ Key Features
 
 - **Tasks CRUD:** Full capability to create, view, update, and delete tasks.
@@ -32,10 +45,16 @@ This section summarizes all the main technologies we used:
 
 This is the critical part for anyone running the project. Since it's a split-stack, we need steps for both folders. I'll provide the steps for the backend first.
 
-### 1. Prerequisites
+### Prerequisites
 
 - Node.js (LTS version)
 - MongoDB (local installation or cloud service like Atlas)
+
+### 1. Clone the Repository
+   ```bash
+   git clone https://github.com/susovan777/Project_Backend.git
+   cd Task_Manager
+   ```
 
 ### 2. Backend Setup (API)
 
@@ -76,4 +95,5 @@ This is the critical part for anyone running the project. Since it's a split-sta
    ```bash
    npm run dev
    ```
-    The client will typically start on http://localhost:5173.
+
+   The client will typically start on http://localhost:5173.

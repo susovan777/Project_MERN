@@ -27,6 +27,50 @@ npm-debug.log*
 
 # testing
 coverage
+*.m3u8
+*.ts
+courses/
 
 # production
 build
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Video files for testing purpose
+*.mp4
+*.mov
+*.avi
+*.wmv
+*.flv
+*.mkv
+*.webm
+*.mpg
+*.mpeg
+*.3gp
+*.3g2
+*.m4v
+*.m2v
+*.ogv
+*.ogg
+*.vob
+*.qt
+*.rm
+*.asf
+*.amv
+*.f4v
+*.f4p
+*.f4a
+*.f4b
+*.mod
+*.svi
+*.mxf
+*.roq
+*.nsv
