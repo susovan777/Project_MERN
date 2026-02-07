@@ -3,8 +3,19 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { config } from './src/config/env.js';
+import errorHandler from './src/middlewares/errorHandler.js';
+import startEventStatusCron from './src/utils/eventStatusCron.js';
+
+// Route imports
+import authRoutes from './src/routes/authRoutes.js';
+import userRoutes from './src/routes/userRoutes.js';
+import adminRoutes from './src/routes/adminRoutes.js';
+import eventRoutes from './src/routes/eventRoutes.js';
 
 const app = express();
+
+// Start cron jobs
+startEventStatusCron();
 
 // Middlewares
 app.use(
@@ -18,6 +29,11 @@ app.use(morgan(config.NODE_ENV === 'production' ? 'compbined' : 'dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/events', eventRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {
@@ -43,5 +59,7 @@ app.use((err, req, res, next) => {
     ...(config.NODE_ENV !== 'production' && { stack: err.stack }),
   });
 });
+
+app.use(errorHandler);
 
 export default app;

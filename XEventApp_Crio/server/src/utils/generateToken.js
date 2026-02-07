@@ -6,3 +6,5 @@ const generateToken = (userId) => {
     expiresIn: config.JWT_EXPIRES,
   });
 };
+
+export default generateToken;

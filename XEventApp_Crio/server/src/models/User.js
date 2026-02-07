@@ -27,17 +27,12 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default:
-        'https://res.cloudinary.com/demo/image/upload/w_100,h_100,c_thumb,g_face,r_20,d_avatar.png/non_existing_id.png',
+        'https://res.cloudinary.com/demo/image/upload/avatar-default.png',
     },
     role: {
       type: String,
       enum: ['Participant', 'Organizer', 'Admin'],
       default: 'Participant',
-    },
-    googleId: {
-      type: String,
-      unique: true,
-      sparse: true, // Allows null values to not conflict with unique constraint
     },
     isEmailVerified: {
       type: Boolean,
@@ -57,13 +52,15 @@ const userSchema = new mongoose.Schema(
 
 // Hash password before saving
 userSchema.pre('save', async function (next) {
-  // Only hash if passowrd is modified or new
+  // Only hash if password is modified or new
   if (!this.isModified('password')) {
     return next();
   }
 
-  // Don't hash if it's Google OAuth user without password
-  if (!this.password) return next();
+  // Don't hash if it's a Google OAuth user without password
+  if (!this.password) {
+    return next();
+  }
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
@@ -79,7 +76,6 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 userSchema.methods.getPublicProfile = function () {
   const user = this.toObject();
   delete user.password;
-  delete user.googleId;
   delete user.__v;
   return user;
 };
