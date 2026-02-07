@@ -6,6 +6,7 @@ import { config } from './src/config/env.js';
 
 const app = express();
 
+// Middlewares
 app.use(
   cors({
     origin: config.CLIENT_URL,
@@ -15,14 +16,22 @@ app.use(
 app.use(helmet());
 app.use(morgan(config.NODE_ENV === 'production' ? 'compbined' : 'dev'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-  res.send('👋 Hello from server');
+
+// Health check route
+app.get('/health', (req, res) => {
+  // res.status(200).send('👋 Hello from server');
+  res.status(200).json({
+    success: true,
+    message: 'Server is running',
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // Not found
 app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
+  res.status(404).json({ success: false, message: 'Route not found' });
 });
 
 // Error handler
