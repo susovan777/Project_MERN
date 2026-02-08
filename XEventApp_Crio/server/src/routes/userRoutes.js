@@ -18,7 +18,7 @@ router.get('/profile', getProfile);
 router.put('/profile', upload.single('avatar'), updateProfile);
 
 // Organizer request (Participants only)
-router.post(
+router.put(
   '/request-organizer',
   authorize('Participant'),
   requestOrganizerRole

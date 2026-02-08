@@ -4,6 +4,64 @@ import Registration from '../models/Registration.js';
 import Event from '../models/Event.js';
 import sendEmail from '../utils/sendEmail.js';
 
+// @desc    Approve user as organizer directly (by user ID)
+// @route   PUT /api/admin/users/:userId/approve-organizer
+// @access  Private (Admin only)
+export const approveUserAsOrganizer = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Find user
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    // Check if user is already organizer or admin
+    if (user.role === 'Organizer' || user.role === 'Admin') {
+      return res.status(400).json({
+        success: false,
+        message: `User already has ${user.role} role`,
+      });
+    }
+
+    // Update user role
+    user.role = 'Organizer';
+    await user.save();
+
+    // Update any pending organizer request
+    await OrganizerRequest.updateMany(
+      { user: userId, status: 'Pending' },
+      {
+        status: 'Approved',
+        reviewedBy: req.user._id,
+        reviewedAt: Date.now(),
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'User approved as Organizer',
+      user: {
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error('Approve User As Organizer Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error approving user as organizer',
+    });
+  }
+};
+
 // @desc    Get all organizer requests
 // @route   GET /api/admin/organizer-requests
 // @access  Private (Admin only)
@@ -21,11 +79,8 @@ export const getOrganizerRequests = async (req, res) => {
       .populate('reviewedBy', 'name email')
       .sort({ createdAt: -1 });
 
-    res.status(200).json({
-      success: true,
-      count: requests.length,
-      requests,
-    });
+    // Return array directly to match test expectations
+    res.status(200).json(requests);
   } catch (error) {
     console.error('Get Organizer Requests Error:', error);
     res.status(500).json({

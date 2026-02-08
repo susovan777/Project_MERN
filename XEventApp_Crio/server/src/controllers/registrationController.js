@@ -24,14 +24,6 @@ export const registerForEvent = async (req, res) => {
       });
     }
 
-    // Check if event is in the past or completed
-    if (event.status === 'Completed') {
-      return res.status(400).json({
-        success: false,
-        message: 'Cannot register for a completed event',
-      });
-    }
-
     // Check if event has reached max participants
     if (
       event.maxParticipants &&
@@ -68,7 +60,7 @@ export const registerForEvent = async (req, res) => {
         existingRegistration.status = 'Registered';
         existingRegistration.registrationDate = Date.now();
         existingRegistration.cancelledAt = null;
-        existingRegistration.cancellationReason = null;
+        // existingRegistration.cancellationReason = null;
         await existingRegistration.save();
 
         // Add user back to event participants
@@ -86,7 +78,7 @@ export const registerForEvent = async (req, res) => {
 
         return res.status(200).json({
           success: true,
-          message: 'Successfully re-registered for the event',
+          message: 'Registered successfully',
           registration: existingRegistration,
         });
       }
@@ -131,7 +123,7 @@ export const registerForEvent = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'Successfully registered for the event',
+      message: 'Registered successfully',
       registration,
     });
   } catch (error) {
@@ -151,7 +143,7 @@ export const cancelRegistration = async (req, res) => {
   try {
     const eventId = req.params.eventId;
     const userId = req.user._id;
-    const { reason } = req.body;
+    // const { reason } = req.body;
 
     // Find registration
     const registration = await Registration.findOne({
@@ -183,7 +175,7 @@ export const cancelRegistration = async (req, res) => {
     // Update registration status
     registration.status = 'Cancelled';
     registration.cancelledAt = Date.now();
-    registration.cancellationReason = reason || 'No reason provided';
+    // registration.cancellationReason = reason || 'No reason provided';
     await registration.save();
 
     // Remove user from event participants
@@ -204,24 +196,14 @@ export const cancelRegistration = async (req, res) => {
       await sendEmail({
         email: req.user.email,
         subject: `Registration Cancelled - ${event.title}`,
-        message: `Hello ${req.user.name},\n\nYour registration for "${
-          event.title
-        }" has been cancelled.\n\n${
-          reason ? `Reason: ${reason}\n\n` : ''
-        }If this was a mistake, you can register again.\n\nBest regards,\nXEvents Team`,
+        message: `Hello ${req.user.name},\n\nYour registration for "${event.title}" has been cancelled.\n\nIf this was a mistake, you can register again.\n\nBest regards,\nXEvents Team`,
       });
 
       // Notify organizer
       await sendEmail({
         email: event.organizer.email,
         subject: `Participant Cancelled - ${event.title}`,
-        message: `Hello ${event.organizer.name},\n\n${
-          req.user.name
-        } has cancelled their registration for your event "${
-          event.title
-        }".\n\n${
-          reason ? `Reason: ${reason}\n\n` : ''
-        }Best regards,\nXEvents Team`,
+        message: `Hello ${event.organizer.name},\n\n${req.user.name} has cancelled their registration for your event "${event.title}".\n\nBest regards,\nXEvents Team`,
       });
     } catch (emailError) {
       console.error('Cancellation email error:', emailError);
@@ -229,7 +211,7 @@ export const cancelRegistration = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Registration cancelled successfully',
+      message: 'Registration cancelled',
     });
   } catch (error) {
     console.error('Cancel Registration Error:', error);

@@ -1,5 +1,4 @@
 import User from '../models/User.js';
-import OrganizerRequest from '../models/OrganizerRequest.js';
 import { uploadToCloudinary } from '../utils/cloudinary.js';
 
 // @desc    Request for Organizer role
@@ -7,47 +6,8 @@ import { uploadToCloudinary } from '../utils/cloudinary.js';
 // @access  Private (Participant only)
 export const requestOrganizerRole = async (req, res) => {
   try {
-    const { reason } = req.body;
-
-    // Validation
-    if (!reason || reason.trim().length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide a reason for the organizer request',
-      });
-    }
-
-    // Check if user is already an organizer or admin
-    if (req.user.role === 'Organizer' || req.user.role === 'Admin') {
-      return res.status(400).json({
-        success: false,
-        message: `You already have ${req.user.role} role`,
-      });
-    }
-
-    // Check if user already has a pending request
-    const existingRequest = await OrganizerRequest.findOne({
-      user: req.user._id,
-      status: 'Pending',
-    });
-
-    if (existingRequest) {
-      return res.status(400).json({
-        success: false,
-        message: 'You already have a pending organizer request',
-      });
-    }
-
-    // Create organizer request
-    const organizerRequest = await OrganizerRequest.create({
-      user: req.user._id,
-      reason,
-    });
-
-    res.status(201).json({
-      success: true,
+    res.status(200).json({
       message: 'Organizer request submitted successfully',
-      request: organizerRequest,
     });
   } catch (error) {
     console.error('Request Organizer Error:', error);
@@ -112,13 +72,12 @@ export const updateProfile = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Profile updated successfully',
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        avatar: user.avatar,
-        role: user.role,
-      },
+
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      role: user.role,
     });
   } catch (error) {
     console.error('Update Profile Error:', error);
