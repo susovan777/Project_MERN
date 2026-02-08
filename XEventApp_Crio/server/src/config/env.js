@@ -8,8 +8,8 @@ export const config = {
 
   CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:3000',
 
-  JWT_SECRET: process.env.JWT_REFRESH_SECRET,
-  JWT_EXPIRES: process.env.JWT_REFRESH_EXPIRES || '7d',
+  JWT_SECRET: process.env.JWT_SECRET,
+  JWT_EXPIRES: process.env.JWT_EXPIRES || '7d',
 
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,

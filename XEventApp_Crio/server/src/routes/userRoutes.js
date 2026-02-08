@@ -1,12 +1,27 @@
 import express from 'express';
-import { signup, login, getMe } from '../controllers/authController.js';
+import {
+  requestOrganizerRole,
+  updateProfile,
+  getProfile,
+} from '../controllers/userController.js';
 import { protect } from '../middlewares/auth.js';
+import { authorize } from '../middlewares/roleAuth.js';
+import upload from '../middlewares/upload.js';
 
 const router = express.Router();
 
-// Regular auth routes
-router.post('/signup', signup);
-router.post('/login', login);
-router.get('/me', protect, getMe);
+// All routes require authentication
+router.use(protect);
+
+// User profile routes
+router.get('/profile', getProfile);
+router.put('/profile', upload.single('avatar'), updateProfile);
+
+// Organizer request (Participants only)
+router.post(
+  '/request-organizer',
+  authorize('Participant'),
+  requestOrganizerRole
+);
 
 export default router;
