@@ -25,7 +25,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="App min-h-screen bg-gray-50">
+        <div className="App min-h-screen text-white">
           {/* Toast Notifications */}
           <Toaster
             position="top-right"
