@@ -39,7 +39,6 @@ const organizerRequestSchema = new mongoose.Schema(
 
 // Index for filtering requests by status
 organizerRequestSchema.index({ status: 1 });
-organizerRequestSchema.index({ user: 1 });
 
 const OrganizerRequest = mongoose.model(
   'OrganizerRequest',
