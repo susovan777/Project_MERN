@@ -37,6 +37,10 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/registration', registrationRoutes);
 
+app.get('/', (req, res) => {
+  const welcome = '<h1>👋 Welcome to XEvent Backend</h1>';
+  res.send(welcome);
+});
 // Health check route
 app.get('/health', (req, res) => {
   // res.status(200).send('👋 Hello from server');
