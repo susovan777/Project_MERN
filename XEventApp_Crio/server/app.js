@@ -19,13 +19,32 @@ const app = express();
 startEventStatusCron();
 
 // Middlewares
+const allowedOrigins = [
+  'https://xevent-app.vercel.app',
+  'http://localhost:5173',
+];
 app.use(
   cors({
-    origin: config.CLIENT_URL,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like Postman or mobile apps)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+    crossOriginPropertyPolicy: { policy: 'cross-origin' },
+  })
+);
 app.use(morgan(config.NODE_ENV === 'production' ? 'compbined' : 'dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -37,10 +56,12 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/registration', registrationRoutes);
 
+// Base route
 app.get('/', (req, res) => {
   const welcome = '<h1>👋 Welcome to XEvent Backend</h1>';
   res.send(welcome);
 });
+
 // Health check route
 app.get('/health', (req, res) => {
   // res.status(200).send('👋 Hello from server');
