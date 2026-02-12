@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
-import EventCard from "../components/EventCard";
-import { useAuth } from "../context/AuthContext";
-import { registrationAPI } from "../services/api";
-import toast from "react-hot-toast";
+import { useState, useEffect } from 'react';
+import Navbar from '../components/Navbar';
+import EventCard from '../components/EventCard';
+import { useAuth } from '../context/AuthContext';
+import { registrationAPI } from '../services/api';
+import toast from 'react-hot-toast';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -17,11 +17,11 @@ const Dashboard = () => {
   const fetchRegistrations = async () => {
     setLoading(true);
     try {
-      const data = await registrationAPI.getMyRegistrations("Registered");
+      const data = await registrationAPI.getMyRegistrations('Registered');
       setRegistrations(data.registrations || []);
     } catch (error) {
-      console.error("Error fetching registrations:", error);
-      toast.error("Failed to load your registrations");
+      console.error('Error fetching registrations:', error);
+      toast.error('Failed to load your registrations');
     } finally {
       setLoading(false);
     }

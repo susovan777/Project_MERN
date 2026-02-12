@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
-import EventCard from "../components/EventCard";
-import { eventAPI } from "../services/api";
-import toast from "react-hot-toast";
-import { FaSearch } from "react-icons/fa";
+import { useState, useEffect } from 'react';
+import Navbar from '../components/Navbar';
+import EventCard from '../components/EventCard';
+import { eventAPI } from '../services/api';
+import toast from 'react-hot-toast';
+import { FaSearch } from 'react-icons/fa';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
-    category: "",
-    eventType: "",
-    status: "",
+    category: '',
+    eventType: '',
+    status: '',
   });
 
   useEffect(() => {
@@ -25,8 +25,8 @@ const Events = () => {
       const data = await eventAPI.getAllEvents(searchFilters);
       setEvents(data.events || []);
     } catch (error) {
-      console.error("Error fetching events:", error);
-      toast.error("Failed to load events");
+      console.error('Error fetching events:', error);
+      toast.error('Failed to load events');
     } finally {
       setLoading(false);
     }
@@ -44,16 +44,16 @@ const Events = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Explore Events
           </h1>
-          <p className="">
+          <p className="text-gray-600">
             Discover amazing events happening around you
           </p>
         </div>
@@ -82,7 +82,8 @@ const Events = () => {
             <select
               className="input w-auto"
               value={filters.category}
-              onChange={(e) => handleFilterChange("category", e.target.value)}>
+              onChange={(e) => handleFilterChange('category', e.target.value)}
+            >
               <option value="">All Categories</option>
               <option value="Conference">Conference</option>
               <option value="Workshop">Workshop</option>
@@ -98,7 +99,8 @@ const Events = () => {
             <select
               className="input w-auto"
               value={filters.eventType}
-              onChange={(e) => handleFilterChange("eventType", e.target.value)}>
+              onChange={(e) => handleFilterChange('eventType', e.target.value)}
+            >
               <option value="">All Types</option>
               <option value="Online">Online</option>
               <option value="Offline">Offline</option>
@@ -107,7 +109,8 @@ const Events = () => {
             <select
               className="input w-auto"
               value={filters.status}
-              onChange={(e) => handleFilterChange("status", e.target.value)}>
+              onChange={(e) => handleFilterChange('status', e.target.value)}
+            >
               <option value="">All Status</option>
               <option value="Upcoming">Upcoming</option>
               <option value="Ongoing">Ongoing</option>

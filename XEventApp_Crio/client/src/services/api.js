@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+console.log(API_URL);
 
 // Create axios instance
 const api = axios.create({
@@ -124,13 +125,17 @@ export const adminAPI = {
 
   // Approve user as organizer by user ID
   approveUserAsOrganizer: async (userId) => {
-    const response = await api.put(`/api/admin/users/${userId}/approve-organizer`);
+    const response = await api.put(
+      `/api/admin/users/${userId}/approve-organizer`
+    );
     return response.data;
   },
 
   // Get event registrations
   getEventRegistrations: async (eventId) => {
-    const response = await api.get(`/api/admin/events/${eventId}/registrations`);
+    const response = await api.get(
+      `/api/admin/events/${eventId}/registrations`
+    );
     return response.data;
   },
 };
@@ -198,7 +203,9 @@ export const eventAPI = {
     Object.keys(filters).forEach((key) => {
       if (filters[key]) params.append(key, filters[key]);
     });
-    const response = await api.get(`/api/events/organizer/get?${params.toString()}`);
+    const response = await api.get(
+      `/api/events/organizer/get?${params.toString()}`
+    );
     return response.data;
   },
 };
@@ -231,7 +238,9 @@ export const registrationAPI = {
 
   // Check if registered
   isRegistered: async (eventId) => {
-    const response = await api.get(`/api/registration/is-registered/${eventId}`);
+    const response = await api.get(
+      `/api/registration/is-registered/${eventId}`
+    );
     return response.data;
   },
 };

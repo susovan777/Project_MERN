@@ -1,12 +1,12 @@
-import { FaCalendarAlt, FaMapMarkerAlt, FaClock, FaUser } from "react-icons/fa";
+import { FaCalendarAlt, FaMapMarkerAlt, FaClock, FaUser } from 'react-icons/fa';
 
 const EventCard = ({ event }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
     });
   };
 
@@ -15,7 +15,7 @@ const EventCard = ({ event }) => {
       {/* Event Image */}
       <div className="h-48 bg-gray-200 overflow-hidden">
         <img
-          src={event.image || "https://picsum.photos/400/300"}
+          src={event.image || 'https://picsum.photos/400/300'}
           alt={event.title}
           className="w-full h-full object-cover"
         />
@@ -64,7 +64,7 @@ const EventCard = ({ event }) => {
             <div className="flex items-center gap-2">
               <FaUser className="text-primary-600" />
               <span className="line-clamp-1">
-                {event.organizer.name || "Unknown Organizer"}
+                {event.organizer.name || 'Unknown Organizer'}
               </span>
             </div>
           )}

@@ -1,18 +1,18 @@
-import { useState } from "react";
-import Navbar from "../components/Navbar";
-import { useAuth } from "../context/AuthContext";
-import { userAPI } from "../services/api";
-import toast from "react-hot-toast";
+import { useState } from 'react';
+import Navbar from '../components/Navbar';
+import { useAuth } from '../context/AuthContext';
+import { userAPI } from '../services/api';
+import toast from 'react-hot-toast';
 
 const Profile = () => {
   const { user, updateUser } = useAuth();
   const [formData, setFormData] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
+    name: user?.name || '',
+    email: user?.email || '',
   });
   const [loading, setLoading] = useState(false);
   const [showOrganizerRequest, setShowOrganizerRequest] = useState(false);
-  const [reason, setReason] = useState("");
+  const [reason, setReason] = useState('');
 
   const handleChange = (e) => {
     setFormData({
@@ -32,10 +32,10 @@ const Profile = () => {
         name: data.name,
         email: data.email,
       });
-      toast.success("Profile updated successfully!");
+      toast.success('Profile updated successfully!');
     } catch (error) {
       const message =
-        error.response?.data?.message || "Failed to update profile";
+        error.response?.data?.message || 'Failed to update profile';
       toast.error(message);
     } finally {
       setLoading(false);
@@ -46,19 +46,19 @@ const Profile = () => {
     e.preventDefault();
 
     if (!reason.trim()) {
-      toast.error("Please provide a reason");
+      toast.error('Please provide a reason');
       return;
     }
 
     setLoading(true);
     try {
       await userAPI.requestOrganizerRole(reason);
-      toast.success("Organizer request submitted successfully!");
+      toast.success('Organizer request submitted successfully!');
       setShowOrganizerRequest(false);
-      setReason("");
+      setReason('');
     } catch (error) {
       const message =
-        error.response?.data?.message || "Failed to submit request";
+        error.response?.data?.message || 'Failed to submit request';
       toast.error(message);
     } finally {
       setLoading(false);
@@ -80,7 +80,8 @@ const Profile = () => {
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1">
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Name
               </label>
               <input
@@ -96,7 +97,8 @@ const Profile = () => {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1">
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Email
               </label>
               <input
@@ -122,8 +124,9 @@ const Profile = () => {
             <button
               type="submit"
               className="btn btn-primary w-full"
-              disabled={loading}>
-              {loading ? "Saving..." : "Save Changes"}
+              disabled={loading}
+            >
+              {loading ? 'Saving...' : 'Save Changes'}
             </button>
           </form>
 
@@ -148,12 +151,13 @@ const Profile = () => {
             </div>
 
             {/* Request Organizer Role Button */}
-            {user?.role === "Participant" && (
+            {user?.role === 'Participant' && (
               <div className="mt-6">
                 {!showOrganizerRequest ? (
                   <button
                     onClick={() => setShowOrganizerRequest(true)}
-                    className="btn btn-outline w-full">
+                    className="btn btn-outline w-full"
+                  >
                     Request Organizer Role
                   </button>
                 ) : (
@@ -174,16 +178,18 @@ const Profile = () => {
                       <button
                         type="submit"
                         className="btn btn-primary flex-1"
-                        disabled={loading}>
-                        {loading ? "Submitting..." : "Submit Request"}
+                        disabled={loading}
+                      >
+                        {loading ? 'Submitting...' : 'Submit Request'}
                       </button>
                       <button
                         type="button"
                         onClick={() => {
                           setShowOrganizerRequest(false);
-                          setReason("");
+                          setReason('');
                         }}
-                        className="btn btn-secondary">
+                        className="btn btn-secondary"
+                      >
                         Cancel
                       </button>
                     </div>
