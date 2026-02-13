@@ -35,6 +35,7 @@ build
 .prettierrc
 *.mp4
 *.pdf
-*.doc
+*.docx
+*.txt
 __CRIO__
 assessment

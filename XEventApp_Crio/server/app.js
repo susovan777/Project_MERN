@@ -16,7 +16,7 @@ import registrationRoutes from './src/routes/registrationRoutes.js';
 const app = express();
 
 // Start cron jobs
-startEventStatusCron();
+// startEventStatusCron();
 
 // Middlewares
 app.use(cors());
