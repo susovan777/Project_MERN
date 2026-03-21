@@ -38,7 +38,7 @@ export const register = async (req, res) => {
     success: true,
     message: 'User is registered successfully',
     user,
-    accessToken,
+    token: accessToken,
   });
 };
 
@@ -70,14 +70,63 @@ export const login = async (req, res) => {
   }
 
   // Create token
-  const generateToken = jwt.sign({ id: user._id }, config.JWT_SECRET, {
+  const accessToken = jwt.sign({ id: user._id }, config.JWT_SECRET, {
     expiresIn: config.JWT_EXPIREIN,
+  });
+
+  const refreshToken = jwt.sign({ id: user._id }, config.JWT_REFRESH_SECRET, {
+    expiresIn: config.JWT_REFRESH_EXPIRES_IN,
+  });
+
+  // Assigning refresh token in http-only cookie
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    maxAge: 7 * 24 * 60 * 1000, // 7 days
   });
 
   res.status(200).json({
     success: true,
     message: 'Logged in succesfully',
     user,
-    generateToken,
+    accessToken,
+  });
+};
+
+export const refreshToken = (req, res) => {
+  // Get refresh token from cookie
+  const getRefreshToken = req.cookies.refreshToken;
+
+  // Decode the refresh token to get Id
+  const decoded = jwt.verify(getRefreshToken, config.JWT_REFRESH_SECRET);
+
+  // Create a new access token
+  const accessToken = jwt.sign({ id: decoded.id }, config.JWT_SECRET, {
+    expiresIn: config.JWT_EXPIREIN,
+  });
+
+  // Create a new refresh token
+  const newRefreshToken = jwt.sign(
+    { id: decoded._id },
+    config.JWT_REFRESH_SECRET,
+    {
+      expiresIn: config.JWT_REFRESH_EXPIRES_IN,
+    }
+  );
+
+  res.cookie('refreshToken', newRefreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    maxAge: 7 * 24 * 60 * 1000, // 7 days
+  });
+
+  console.log(decoded);
+
+  res.status(200).json({
+    success: true,
+    message: 'Access token refreshed successfully',
+    accessToken,
   });
 };
