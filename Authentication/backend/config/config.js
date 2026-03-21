@@ -5,6 +5,8 @@ configDotenv();
 const config = {
   PORT: process.env.PORT,
   MONGO_URI: process.env.MONGO_URI,
+  JWT_SECRET: process.env.JWT_SECRET,
+  JWT_EXPIREIN: process.env.JWT_EXPIREIN
 };
 
 export default config;
