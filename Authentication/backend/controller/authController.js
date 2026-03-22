@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken';
 import User from '../model/User.js';
 import config from '../config/config.js';
+import Session from '../model/Session.js';
 
 /**
- * @desc  Register a new user
- * @route POST /api/auth/register
+ * @desc   Register a new user
+ * @route  POST /api/auth/register
  */
 export const register = async (req, res) => {
   // Get data from request body
@@ -29,9 +30,34 @@ export const register = async (req, res) => {
     password,
   });
 
-  // Create a JWT using jwt.sign(payload, secret, expiration_time)
-  const accessToken = jwt.sign({ id: user._id }, config.JWT_SECRET, {
-    expiresIn: config.JWT_EXPIREIN,
+  // Create a refresh token using jwt.sign(payload, secret, expiration_time)
+  const refreshToken = jwt.sign({ id: user._id }, config.JWT_REFRESH_SECRET, {
+    expiresIn: config.JWT_REFRESH_EXPIRES_IN,
+  });
+
+  // Create a new session on register
+  const session = await Session.create({
+    userId: user._id,
+    refreshToken,
+    ip: req.ip,
+    userAgent: req.headers['user-agent'],
+  });
+
+  // Create a access token
+  const accessToken = jwt.sign(
+    { id: user._id, sessionId: session._id },
+    config.JWT_SECRET,
+    {
+      expiresIn: config.JWT_EXPIREIN,
+    }
+  );
+
+  // Assigning refresh token in http-only cookie
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    maxAge: 7 * 24 * 60 * 1000, // 7 days
   });
 
   res.status(201).json({
@@ -43,8 +69,8 @@ export const register = async (req, res) => {
 };
 
 /**
- * @desc  Login user
- * @route POST /api/auth/login
+ * @desc   Login user
+ * @route  POST /api/auth/login
  */
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -69,14 +95,26 @@ export const login = async (req, res) => {
     });
   }
 
-  // Create token
-  const accessToken = jwt.sign({ id: user._id }, config.JWT_SECRET, {
-    expiresIn: config.JWT_EXPIREIN,
-  });
-
   const refreshToken = jwt.sign({ id: user._id }, config.JWT_REFRESH_SECRET, {
     expiresIn: config.JWT_REFRESH_EXPIRES_IN,
   });
+
+  // Create a new session on login
+  const session = await Session.create({
+    userId: user._id,
+    refreshToken,
+    ip: req.ip,
+    userAgent: req.headers['user-agent'],
+  });
+
+  // Create token
+  const accessToken = jwt.sign(
+    { id: user._id, sessionId: session._id },
+    config.JWT_SECRET,
+    {
+      expiresIn: config.JWT_EXPIREIN,
+    }
+  );
 
   // Assigning refresh token in http-only cookie
   res.cookie('refreshToken', refreshToken, {
@@ -94,6 +132,10 @@ export const login = async (req, res) => {
   });
 };
 
+/**
+ * @desc   Generate Refresh Token
+ * @route  POST api/auth/refresh-token
+ */
 export const refreshToken = (req, res) => {
   // Get refresh token from cookie
   const getRefreshToken = req.cookies.refreshToken;
@@ -115,6 +157,7 @@ export const refreshToken = (req, res) => {
     }
   );
 
+  // Assigning new refresh token in http-only cookie
   res.cookie('refreshToken', newRefreshToken, {
     httpOnly: true,
     secure: true,
@@ -122,11 +165,39 @@ export const refreshToken = (req, res) => {
     maxAge: 7 * 24 * 60 * 1000, // 7 days
   });
 
-  console.log(decoded);
-
   res.status(200).json({
     success: true,
     message: 'Access token refreshed successfully',
     accessToken,
+  });
+};
+
+/**
+ * @desc   Logout User
+ * @route  GET api/auth/logout
+ */
+export const logout = async (req, res) => {
+  // Get the refresh token from cookie
+  const getRefreshToken = req.cookies.refreshToken;
+
+  // Decode the refresh token to get Id
+  const decoded = jwt.verify(getRefreshToken, config.JWT_REFRESH_SECRET);
+
+  // Find session with the same hashed refresh token
+  const session = await Session.findOne({
+    userId: decoded.id,
+    revoked: false,
+  });
+
+  // Change revoked to true and save
+  session.revoked = true;
+  await session.save();
+
+  // Clear exisiting cookie
+  res.clearCookie('refreshToken');
+
+  res.status(200).json({
+    success: true,
+    message: 'Logged out successfully',
   });
 };
