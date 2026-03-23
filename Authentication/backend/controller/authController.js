@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../model/User.js';
 import config from '../config/config.js';
@@ -184,14 +185,24 @@ export const logout = async (req, res) => {
   const decoded = jwt.verify(getRefreshToken, config.JWT_REFRESH_SECRET);
 
   // Find session with the same hashed refresh token
-  const session = await Session.findOne({
+  const sessions = await Session.find({
     userId: decoded.id,
     revoked: false,
   });
 
+  // Find the current session
+  let currentSession;
+  for (let session of sessions) {
+    const isMatch = await bcrypt.compare(getRefreshToken, session.refreshToken);
+    if (isMatch) {
+      currentSession = session;
+      break;
+    }
+  }
+
   // Change revoked to true and save
-  session.revoked = true;
-  await session.save();
+  currentSession.revoked = true;
+  await currentSession.save();
 
   // Clear exisiting cookie
   res.clearCookie('refreshToken');
